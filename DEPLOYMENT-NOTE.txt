@@ -1,0 +1,17 @@
+Team Sigma SPPS fixed package
+
+Upload the CONTENTS of this folder to the root of the GitHub repository, not the folder itself.
+
+Required root files/folders:
+- index.html
+- style.css
+- script.js
+- assets/
+- downloads/
+- achievements/
+- meet-the-team/
+- manifesto/
+
+This version also includes inline CSS and JavaScript fallbacks inside each HTML page. That means the layout should still render correctly even if GitHub Pages or a browser misses the external style.css/script.js during testing.
+
+Only fundraising-donation-policy-summary.pdf is included. Add other PDFs to downloads/ only when ready to release them.
