@@ -1,15 +1,19 @@
-# Team Sigma SPPS Public Site
+# Team Sigma SPPS Public Website
 
-Updated static campaign website package.
+Static campaign website for GitHub Pages.
 
-## Public release state
-- Fundraising and Donation Policy PDF is included and available.
-- Other policy PDFs are not included yet. Their link paths are preserved for later upload.
-- Candidate names, photos, qualifications and profile details have been removed from the public package and replaced with coming soon placeholders.
-- Manifesto content is hidden behind a coming soon placeholder.
+## Upload structure
+Upload the contents of this folder to the repository root, not the wrapper folder.
 
-## Important static site note
-This is a GitHub Pages/static website. Browser-based locking is not security. Do not upload unreleased PDFs, private profiles, candidate photos or sensitive content until you are ready for the public to access them.
+Required root items:
+- index.html
+- style.css
+- script.js
+- assets/
+- downloads/
+- achievements/
+- meet-the-team/
+- manifesto/
 
-## Hidden controls
-The footer text "Vote Team Sigma" reveals the browser-only control panel after seven clicks.
+## Rollout note
+The hidden rollout panel changes what the current browser displays using local storage. It is staging friction, not security. Do not upload files that must remain private.
