@@ -153,6 +153,15 @@
     if(one[cmd]){const unlock=!cmd.startsWith('Lock');setKeys(one[cmd],unlock);removeSchedulesFor(one[cmd]);say(`${cmd} applied.`);return;}
     say('Command not recognised.');
   }
+  function lockKeysForFutureSchedule(keys,item){
+    const st=loadState();
+    keys.forEach(k=>{
+      // Keep the fundraising policy public by default unless it is being scheduled directly.
+      if(k==='policy-fundraising' && item!=='policy-fundraising') return;
+      st[k]=false;
+    });
+    saveState(st);
+  }
   function applyPanelAction(){
     const item=$('#rollout-item')?.value || 'all'; const action=$('#rollout-action')?.value || 'unlock'; const scheduled=$('#rollout-scheduled')?.checked;
     const date=$('#rollout-date')?.value; const time=$('#rollout-time')?.value || '00:00'; const keys=keysFor(item);
@@ -162,8 +171,15 @@
       const ts=new Date(`${date}T${time}`).getTime();
       if(!Number.isFinite(ts)){say('The selected date/time could not be read.');return;}
       const sch=loadSchedules(); keys.forEach(k=>sch[k]=ts); saveSchedules(sch); renderSchedules();
-      if(ts<=Date.now()){setKeys(keys,true);removeSchedulesFor(keys);say(`${labels[item]||item} released because the scheduled time has already passed.`);}
-      else{applyRelease();say(`${labels[item]||item} scheduled for ${date} at ${time}.`);}
+      if(ts<=Date.now()){
+        setKeys(keys,true);removeSchedulesFor(keys);say(`${labels[item]||item} released because the scheduled time has already passed.`);
+      }
+      else{
+        // Important: scheduling a future release should stage/lock the item now, then reveal it at the scheduled time.
+        lockKeysForFutureSchedule(keys,item);
+        applyRelease();
+        say(`${labels[item]||item} scheduled for ${date} at ${time}. It will stay hidden until that time in this browser.`);
+      }
       return;
     }
     setKeys(keys,true);removeSchedulesFor(keys);say(`${labels[item]||item} unlocked immediately in this browser.`);
