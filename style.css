@@ -67,3 +67,68 @@
 .policy-title{
   font-size: clamp(1.8rem, 2.25vw, 2.7rem) !important;
 }
+
+/* QA PATCH 3 — definitive homepage layout fix at full desktop zoom */
+/* Keep the hero from using two squeezed columns. The election card now sits below
+   the headline area so the large campaign type can breathe at 100% browser zoom. */
+.hero-grid{
+  grid-template-columns: 1fr !important;
+  gap: 2.25rem !important;
+  align-items: start !important;
+}
+.election-card{
+  justify-self: start !important;
+  width: min(100%, 520px) !important;
+  max-width: 520px !important;
+  margin-top: .25rem !important;
+}
+.hero h1{
+  font-size: clamp(3.25rem, 6.6vw, 7rem) !important;
+  max-width: 1040px !important;
+  line-height: .92 !important;
+}
+.hero h1 .green{
+  display: block !important;
+  max-width: 100% !important;
+}
+.lead{
+  max-width: 760px !important;
+}
+
+/* Keep core focus cards readable instead of forcing four narrow columns. */
+.grid.four{
+  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)) !important;
+  align-items: stretch !important;
+}
+.grid.four .card{
+  overflow: visible !important;
+  min-width: 0 !important;
+}
+.grid.four .card h3{
+  font-size: clamp(1.45rem, 1.8vw, 1.9rem) !important;
+  line-height: 1.12 !important;
+  white-space: normal !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  hyphens: none !important;
+}
+.grid.four .card p{
+  max-width: 44ch !important;
+}
+
+@media (min-width: 1180px){
+  .grid.four{
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  .grid.four .card h3{
+    font-size: clamp(1.35rem, 1.55vw, 1.75rem) !important;
+  }
+}
+@media (max-width: 760px){
+  .hero h1{
+    font-size: clamp(2.7rem, 13vw, 4.6rem) !important;
+  }
+  .grid.four{
+    grid-template-columns: 1fr !important;
+  }
+}
