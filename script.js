@@ -4,16 +4,18 @@
   const storeKey='teamSigmaPublicReleaseV6';
   const scheduleKey='teamSigmaPublicReleaseScheduleV2';
   const defaultState={
+    // Public default: candidate profiles are live on the site.
+    // Policies remain staged except Fundraising, and the manifesto remains staged until released.
     'policy-fundraising':true,
     'policy-admissions':false,
     'policy-hr':false,
     'policy-pr':false,
     'policy-fieldtrip':false,
     'policy-health':false,
-    'candidate-president':false,
-    'candidate-vice-president':false,
-    'candidate-secretary':false,
-    'candidate-treasurer':false,
+    'candidate-president':true,
+    'candidate-vice-president':true,
+    'candidate-secretary':true,
+    'candidate-treasurer':true,
     'manifesto':false
   };
   const groups={

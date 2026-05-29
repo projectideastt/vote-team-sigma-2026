@@ -1,3 +1,1 @@
-Upload the CONTENTS of this folder to GitHub Pages root. Do not upload the outer folder itself.
-
-The Fundraising and Donation PDF is included. Other PDF filenames are preserved as placeholders but the files are not included.
+Team Sigma public website package. Candidate profiles are configured to be visible by default. Upload the contents of this folder to the GitHub repository root.

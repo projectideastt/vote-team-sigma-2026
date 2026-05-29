@@ -1,8 +1,8 @@
 {
   "timezone": "America/Port_of_Spain",
-  "generatedFor": "candidate-profiles-unlocked-by-default",
+  "mode": "public-default-candidates-released",
   "updated": "2026-05-29T01:00:00-04:00",
-  "notes": "Global release configuration for Team Sigma public website. Candidate profiles are unlocked by default. Other policies and manifesto remain controlled by default unless listed here.",
+  "notes": "Candidate profiles are released by default across the public site. Other staged items can still be released later through this config or local preview controls.",
   "releases": {
     "policy-fundraising": "2026-05-29T01:00:00-04:00",
     "candidate-president": "2026-05-29T01:00:00-04:00",
