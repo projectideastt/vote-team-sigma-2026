@@ -40,11 +40,59 @@
   const aliases={
     AnonymousRelease:'UnlockAll',AnonymousClose:'LockAll',ResetSchedule:'Reset',OpenTuesday:'UnlockCandidates',OpenThursday:'UnlockPolicies'
   };
+  const scriptUrl = document.currentScript ? new URL(document.currentScript.src) : new URL('script.js', window.location.href);
+  const releaseConfigUrl = new URL('release-config.json', scriptUrl).href;
+  let globalConfig = {loaded:false,error:null,releases:{}};
+
   function loadState(){try{return {...defaultState,...JSON.parse(localStorage.getItem(storeKey)||'{}')}}catch(e){return {...defaultState}}}
   function saveState(state){localStorage.setItem(storeKey,JSON.stringify(state));}
   function loadSchedules(){try{return JSON.parse(localStorage.getItem(scheduleKey)||'{}')}catch(e){return {}}}
   function saveSchedules(s){localStorage.setItem(scheduleKey,JSON.stringify(s));}
   function keysFor(item){return groups[item]||[item];}
+
+  async function loadGlobalConfig(){
+    try{
+      const res = await fetch(releaseConfigUrl,{cache:'no-store'});
+      if(!res.ok) throw new Error('Release config not found');
+      const data = await res.json();
+      globalConfig = {
+        loaded:true,
+        error:null,
+        timezone:data.timezone || '',
+        releases:data.releases || {},
+        updated:data.updated || data.generatedFor || ''
+      };
+    }catch(e){
+      globalConfig = {...globalConfig,loaded:false,error:e.message || 'Could not load release config'};
+    }
+  }
+
+  function globalReleasedState(){
+    const out={};
+    const now=Date.now();
+    Object.entries(globalConfig.releases || {}).forEach(([item,value])=>{
+      const ts = Date.parse(value);
+      if(Number.isFinite(ts) && ts<=now){
+        keysFor(item).forEach(k=>out[k]=true);
+      }
+    });
+    return out;
+  }
+
+  function getEffectiveState(){
+    // Global release-config.json is the public source of truth. Local controls can preview early unlocks,
+    // but they cannot hide something after the global release time has passed.
+    return {...loadState(),...globalReleasedState()};
+  }
+
+  function globalScheduleForKey(key){
+    const releases=globalConfig.releases || {};
+    if(releases[key]) return releases[key];
+    for(const [group,value] of Object.entries(releases)){
+      if((groups[group]||[]).includes(key)) return value;
+    }
+    return '';
+  }
   function setKeys(keys,val){const s=loadState();keys.forEach(k=>s[k]=val);saveState(s);applyRelease();}
   function removeSchedulesFor(keys){const sch=loadSchedules();keys.forEach(k=>delete sch[k]);saveSchedules(sch);renderSchedules();}
   function checkSchedulesNoLoop(){
@@ -92,13 +140,18 @@
     if(!status) return;
     const sch=loadSchedules();
     const rows=[...groups.candidates,'manifesto',...groups.policies].map(k=>{
-      const state=s[k]?'Released':(sch[k]?'Scheduled':'Locked');
-      const when=sch[k]?` · ${new Date(Number(sch[k])).toLocaleString()}`:'';
+      const globalWhen=globalScheduleForKey(k);
+      const globalTs=globalWhen ? Date.parse(globalWhen) : NaN;
+      let state=s[k]?'Released':(sch[k]?'Local scheduled':(globalWhen?'Global scheduled':'Locked'));
+      let when='';
+      if(sch[k]) when=` · ${new Date(Number(sch[k])).toLocaleString()}`;
+      else if(globalWhen && Number.isFinite(globalTs)) when=` · ${new Date(globalTs).toLocaleString()}`;
       return `<div><strong>${labels[k]||k}</strong><span>${state}${when}</span></div>`;
     }).join('');
     const openPolicies=groups.policies.filter(k=>s[k]).length;
     const openCandidates=groups.candidates.filter(k=>s[k]).length;
-    status.innerHTML=`<h3>Page Status</h3><p>${openCandidates}/4 candidate profiles released · ${openPolicies}/6 policies released · ${s.manifesto?'Manifesto released':'Manifesto locked'}</p><div class="status-grid">${rows}</div>`;
+    const configNote = globalConfig.loaded ? 'Global release config loaded.' : 'Global release config not loaded; local preview controls only.';
+    status.innerHTML=`<h3>Page Status</h3><p>${openCandidates}/4 candidate profiles released · ${openPolicies}/6 policies released · ${s.manifesto?'Manifesto released':'Manifesto locked'}<br>${configNote}</p><div class="status-grid">${rows}</div>`;
   }
   async function checkPdfFiles(s){
     const cards=$$('[data-pdf-url]');
@@ -122,7 +175,7 @@
   }
   function applyRelease(){
     checkSchedulesNoLoop();
-    const s=loadState();
+    const s=getEffectiveState();
     setReleasedClasses(s);
     updateCandidateIntro(s);
     updateStatusPanel(s);
@@ -199,6 +252,9 @@
   }
   document.addEventListener('DOMContentLoaded',()=>{
     const menu=$('#menu-toggle'), nav=$('#nav'); if(menu&&nav)menu.addEventListener('click',()=>nav.classList.toggle('open'));
-    initSecret();applyRelease();renderSchedules();setInterval(()=>{checkSchedules();applyRelease();},30000);
+    initSecret();applyRelease();renderSchedules();
+    loadGlobalConfig().then(()=>{applyRelease();renderSchedules();});
+    setInterval(()=>{checkSchedules();applyRelease();},30000);
+    setInterval(()=>{loadGlobalConfig().then(()=>applyRelease());},120000);
   });
 })();

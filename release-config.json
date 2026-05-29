@@ -1,0 +1,19 @@
+{
+  "timezone": "America/Port_of_Spain",
+  "generatedFor": "2026-05-29T01:00:00-04:00",
+  "updated": "2026-05-29T01:00:00-04:00",
+  "notes": "Global release schedule for Team Sigma public website. Times use Trinidad and Tobago time (UTC-04:00).",
+  "releases": {
+    "policy-fundraising": "2026-05-29T01:00:00-04:00",
+    "policy-admissions": "2026-05-29T01:00:00-04:00",
+    "policy-hr": "2026-05-29T01:00:00-04:00",
+    "policy-pr": "2026-05-29T01:00:00-04:00",
+    "policy-fieldtrip": "2026-05-29T01:00:00-04:00",
+    "policy-health": "2026-05-29T01:00:00-04:00",
+    "candidate-president": "2026-05-29T01:00:00-04:00",
+    "candidate-vice-president": "2026-05-29T01:00:00-04:00",
+    "candidate-secretary": "2026-05-29T01:00:00-04:00",
+    "candidate-treasurer": "2026-05-29T01:00:00-04:00",
+    "manifesto": "2026-05-29T01:00:00-04:00"
+  }
+}
