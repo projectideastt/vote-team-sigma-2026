@@ -1,9 +1,8 @@
-
 (function(){
   const $=(sel,root=document)=>root.querySelector(sel);
   const $$=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
-  const storeKey='teamSigmaPublicReleaseV5';
-  const scheduleKey='teamSigmaPublicReleaseScheduleV1';
+  const storeKey='teamSigmaPublicReleaseV6';
+  const scheduleKey='teamSigmaPublicReleaseScheduleV2';
   const defaultState={
     'policy-fundraising':true,
     'policy-admissions':false,
@@ -48,14 +47,17 @@
   function keysFor(item){return groups[item]||[item];}
   function setKeys(keys,val){const s=loadState();keys.forEach(k=>s[k]=val);saveState(s);applyRelease();}
   function removeSchedulesFor(keys){const sch=loadSchedules();keys.forEach(k=>delete sch[k]);saveSchedules(sch);renderSchedules();}
-  function checkSchedules(){
+  function checkSchedulesNoLoop(){
     const sch=loadSchedules(); const now=Date.now(); let changed=false; const st=loadState();
     Object.entries(sch).forEach(([key,ts])=>{ if(Number(ts)<=now){ st[key]=true; delete sch[key]; changed=true; }});
-    if(changed){ saveState(st); saveSchedules(sch); applyRelease(); renderSchedules(); }
+    if(changed){saveState(st);saveSchedules(sch);}
   }
-  function applyRelease(){
+  function checkSchedules(){
+    const before=JSON.stringify(loadSchedules());
     checkSchedulesNoLoop();
-    const s=loadState();
+    if(before!==JSON.stringify(loadSchedules())){applyRelease();renderSchedules();}
+  }
+  function setReleasedClasses(s){
     $$('[data-release-key]').forEach(el=>{
       const keys=String(el.dataset.releaseKey||'').split(/\s+/).filter(Boolean);
       const open=keys.some(k=>!!s[k]);
@@ -70,14 +72,61 @@
         });
       }
     });
-    $$('[data-status-key]').forEach(el=>{const key=el.dataset.statusKey;const open=!!s[key];el.textContent=open?'Available':'Coming soon';el.classList.toggle('open',open);});
-    const status=$('#sigma-status');
-    if(status){const openPolicies=groups.policies.filter(k=>s[k]).length;const openCandidates=groups.candidates.filter(k=>s[k]).length;status.textContent=`This browser view: ${openCandidates}/4 candidate profiles open · ${openPolicies}/6 policies open · ${s.manifesto?'manifesto open':'manifesto locked'}`;}
+    $$('[data-status-key]').forEach(el=>{
+      const key=el.dataset.statusKey;const open=!!s[key];
+      el.textContent=open?'Available':'Coming soon';
+      el.classList.toggle('open',open);
+    });
   }
-  function checkSchedulesNoLoop(){
-    const sch=loadSchedules(); const now=Date.now(); let changed=false; const st=loadState();
-    Object.entries(sch).forEach(([key,ts])=>{ if(Number(ts)<=now){ st[key]=true; delete sch[key]; changed=true; }});
-    if(changed){saveState(st);saveSchedules(sch);}
+  function updateCandidateIntro(s){
+    const open=groups.candidates.filter(k=>s[k]).length;
+    const text = open===0
+      ? 'Candidate profiles will be shared soon. Each card will reveal the candidate’s photo, message and profile link when available.'
+      : open<groups.candidates.length
+        ? 'Candidate profiles are being shared in stages. Select an available profile to learn more about each candidate’s message and priorities.'
+        : 'Meet the Team Sigma candidates and learn more about their experience, priorities, and commitment to accountable, student-centred leadership.';
+    $$('[data-candidate-intro]').forEach(el=>{el.textContent=text;});
+  }
+  function updateStatusPanel(s){
+    const status=$('#sigma-status');
+    if(!status) return;
+    const sch=loadSchedules();
+    const rows=[...groups.candidates,'manifesto',...groups.policies].map(k=>{
+      const state=s[k]?'Released':(sch[k]?'Scheduled':'Locked');
+      const when=sch[k]?` · ${new Date(Number(sch[k])).toLocaleString()}`:'';
+      return `<div><strong>${labels[k]||k}</strong><span>${state}${when}</span></div>`;
+    }).join('');
+    const openPolicies=groups.policies.filter(k=>s[k]).length;
+    const openCandidates=groups.candidates.filter(k=>s[k]).length;
+    status.innerHTML=`<h3>Page Status</h3><p>${openCandidates}/4 candidate profiles released · ${openPolicies}/6 policies released · ${s.manifesto?'Manifesto released':'Manifesto locked'}</p><div class="status-grid">${rows}</div>`;
+  }
+  async function checkPdfFiles(s){
+    const cards=$$('[data-pdf-url]');
+    for(const card of cards){
+      const url=card.dataset.pdfUrl;
+      if(card.dataset.pdfKnown==='true'){
+        card.classList.add('file-present');card.classList.remove('file-missing');
+        continue;
+      }
+      card.classList.add('file-checking');
+      try{
+        const res=await fetch(url,{method:'HEAD',cache:'no-store'});
+        if(res.ok){card.classList.add('file-present');card.classList.remove('file-missing');}
+        else{card.classList.add('file-missing');card.classList.remove('file-present');}
+      }catch(e){
+        // Some local previews block HEAD; try a tiny GET before deciding the file is absent.
+        try{const res=await fetch(url,{method:'GET',cache:'no-store'}); if(res.ok){card.classList.add('file-present');card.classList.remove('file-missing');} else {card.classList.add('file-missing');card.classList.remove('file-present');}}
+        catch(_){card.classList.add('file-missing');card.classList.remove('file-present');}
+      }finally{card.classList.remove('file-checking');}
+    }
+  }
+  function applyRelease(){
+    checkSchedulesNoLoop();
+    const s=loadState();
+    setReleasedClasses(s);
+    updateCandidateIntro(s);
+    updateStatusPanel(s);
+    checkPdfFiles(s);
   }
   function say(t){const msg=$('#sigma-message'); if(msg) msg.textContent=t;}
   function command(raw){
@@ -96,10 +145,10 @@
       UnlockCandidates:groups.candidates,LockCandidates:groups.candidates,
       UnlockManifesto:['manifesto'],LockManifesto:['manifesto']
     };
-    if(cmd==='UnlockAll'){setKeys(groups.all,true);removeSchedulesFor(groups.all);say('All staged sections are open in this browser.');return;}
-    if(cmd==='LockAll'){const locked={...defaultState,'policy-fundraising':true};saveState(locked);removeSchedulesFor(groups.all);applyRelease();say('Staged sections locked. Fundraising remains available.');return;}
-    if(cmd==='UnlockPolicies'){setKeys(groups.policies,true);removeSchedulesFor(groups.policies);say('All policy cards are open in this browser.');return;}
-    if(cmd==='LockPolicies'){const st=loadState();groups.policies.forEach(k=>st[k]=false);st['policy-fundraising']=true;saveState(st);removeSchedulesFor(groups.policies);applyRelease();say('Policy cards locked except Fundraising.');return;}
+    if(cmd==='UnlockAll'){setKeys(groups.all,true);removeSchedulesFor(groups.all);say('All sections are released in this browser.');return;}
+    if(cmd==='LockAll'){const locked={...defaultState,'policy-fundraising':true};saveState(locked);removeSchedulesFor(groups.all);applyRelease();say('Sections locked. Fundraising remains available.');return;}
+    if(cmd==='UnlockPolicies'){setKeys(groups.policies,true);removeSchedulesFor(groups.policies);say('All policy pages are released in this browser.');return;}
+    if(cmd==='LockPolicies'){const st=loadState();groups.policies.forEach(k=>st[k]=false);st['policy-fundraising']=true;saveState(st);removeSchedulesFor(groups.policies);applyRelease();say('Policy pages locked except Fundraising.');return;}
     if(cmd==='Reset'){localStorage.removeItem(storeKey);localStorage.removeItem(scheduleKey);applyRelease();renderSchedules();say('Browser view reset to public default.');return;}
     if(one[cmd]){const unlock=!cmd.startsWith('Lock');setKeys(one[cmd],unlock);removeSchedulesFor(one[cmd]);say(`${cmd} applied.`);return;}
     say('Command not recognised.');
@@ -114,7 +163,7 @@
       if(!Number.isFinite(ts)){say('The selected date/time could not be read.');return;}
       const sch=loadSchedules(); keys.forEach(k=>sch[k]=ts); saveSchedules(sch); renderSchedules();
       if(ts<=Date.now()){setKeys(keys,true);removeSchedulesFor(keys);say(`${labels[item]||item} released because the scheduled time has already passed.`);}
-      else{say(`${labels[item]||item} scheduled for ${date} at ${time}.`);}
+      else{applyRelease();say(`${labels[item]||item} scheduled for ${date} at ${time}.`);}
       return;
     }
     setKeys(keys,true);removeSchedulesFor(keys);say(`${labels[item]||item} unlocked immediately in this browser.`);
@@ -127,7 +176,7 @@
   function initSecret(){
     const trig=$('#sigma-trigger'), panel=$('#sigma-panel'), close=$('#sigma-close'), form=$('#sigma-form'), input=$('#sigma-code'), apply=$('#rollout-apply');
     let taps=0,timer=null;
-    if(trig&&panel){trig.addEventListener('click',()=>{taps++;clearTimeout(timer);timer=setTimeout(()=>taps=0,1800);if(taps>=7){panel.classList.add('open');taps=0;renderSchedules();}})}
+    if(trig&&panel){trig.addEventListener('click',()=>{taps++;clearTimeout(timer);timer=setTimeout(()=>taps=0,1800);if(taps>=7){panel.classList.add('open');taps=0;renderSchedules();applyRelease();}})}
     if(close&&panel){close.addEventListener('click',()=>panel.classList.remove('open'));}
     if(form){form.addEventListener('submit',e=>{e.preventDefault();command(input.value);input.value='';});}
     if(apply){apply.addEventListener('click',applyPanelAction);}
