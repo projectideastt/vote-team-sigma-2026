@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" role="img" aria-labelledby="title desc">
+<title id="title">Profile coming soon</title>
+<desc id="desc">A generic profile placeholder used before candidate release.</desc>
+<defs>
+  <radialGradient id="g" cx="50%" cy="35%" r="80%">
+    <stop offset="0%" stop-color="#0f250c"/>
+    <stop offset="55%" stop-color="#030803"/>
+    <stop offset="100%" stop-color="#000000"/>
+  </radialGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="4" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<rect width="240" height="320" fill="url(#g)"/>
+<rect x="18" y="18" width="204" height="284" rx="28" fill="none" stroke="#72bf01" stroke-opacity="0.34"/>
+<g filter="url(#glow)" opacity="0.95">
+  <circle cx="120" cy="122" r="36" fill="none" stroke="#f5fff1" stroke-width="12"/>
+  <path d="M58 235c7-47 33-72 62-72s55 25 62 72" fill="none" stroke="#f5fff1" stroke-width="13" stroke-linecap="round"/>
+</g>
+<text x="120" y="278" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="3" fill="#9dff1e">PROFILE SLOT</text>
+</svg>

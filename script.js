@@ -62,6 +62,13 @@
       el.classList.toggle('release-open',open);
       el.classList.toggle('release-locked',!open);
       el.setAttribute('aria-disabled',open?'false':'true');
+      if(open){
+        $$('.release-photo[data-src]', el).forEach(img=>{
+          if(!img.getAttribute('src') || img.getAttribute('src').includes('profile-slot.svg')){
+            img.setAttribute('src', img.dataset.src);
+          }
+        });
+      }
     });
     $$('[data-status-key]').forEach(el=>{const key=el.dataset.statusKey;const open=!!s[key];el.textContent=open?'Available':'Coming soon';el.classList.toggle('open',open);});
     const status=$('#sigma-status');
