@@ -1,13 +1,19 @@
 {
   "timezone": "America/Port_of_Spain",
-  "mode": "public-default-candidates-released",
-  "updated": "2026-05-29T01:00:00-04:00",
-  "notes": "Candidate profiles are released by default across the public site. Other staged items can still be released later through this config or local preview controls.",
+  "mode": "public-release-policies-and-candidates-released",
+  "updated": "2026-06-03T01:00:00-04:00",
+  "notes": "Release package: all policy pages and candidate profiles are released by default. PDF files are included in downloads.",
   "releases": {
-    "policy-fundraising": "2026-05-29T01:00:00-04:00",
-    "candidate-president": "2026-05-29T01:00:00-04:00",
-    "candidate-vice-president": "2026-05-29T01:00:00-04:00",
-    "candidate-secretary": "2026-05-29T01:00:00-04:00",
-    "candidate-treasurer": "2026-05-29T01:00:00-04:00"
+    "policy-fundraising": "2026-06-03T01:00:00-04:00",
+    "candidate-president": "2026-06-03T01:00:00-04:00",
+    "candidate-vice-president": "2026-06-03T01:00:00-04:00",
+    "candidate-secretary": "2026-06-03T01:00:00-04:00",
+    "candidate-treasurer": "2026-06-03T01:00:00-04:00",
+    "policy-admissions": "2026-06-03T01:00:00-04:00",
+    "policy-hr": "2026-06-03T01:00:00-04:00",
+    "policy-pr": "2026-06-03T01:00:00-04:00",
+    "policy-fieldtrip": "2026-06-03T01:00:00-04:00",
+    "policy-health": "2026-06-03T01:00:00-04:00",
+    "policy-conduct": "2026-06-03T01:00:00-04:00"
   }
 }

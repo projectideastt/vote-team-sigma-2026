@@ -1,0 +1,18 @@
+Team Sigma SPPS Website Release Package - 2026-06-03
+
+Changes included:
+1. All policy sections are released by default through release-config.json and script.js.
+2. Policy card display font size has been reduced in style.css so the original titles remain readable without shortening them.
+3. Uploaded policy PDFs have been added to the downloads folder using the filenames expected by the website.
+4. A Student Code of Conduct and Discipline Policy release page and policy card have been added.
+
+Included policy PDFs:
+- downloads/fundraising-donation-policy-summary.pdf
+- downloads/admissions-enrolment-policy-summary.pdf
+- downloads/human-resource-policy-summary.pdf
+- downloads/public-relations-social-media-policy-summary.pdf
+- downloads/field-trip-policy-summary.pdf
+- downloads/health-emergency-response-policy-summary.pdf
+- downloads/student-code-of-conduct-discipline-policy-summary.pdf
+
+Upload the full folder contents to the web host/GitHub Pages repository root.

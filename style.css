@@ -132,3 +132,36 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+
+/* RELEASE PACKAGE PATCH — policy card readability
+   Preserve the original titles, but reduce card display type so long headings do not clip. */
+.policy-grid{
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)) !important;
+  align-items: stretch !important;
+}
+.policy-card{
+  min-height: 330px !important;
+  overflow: hidden !important;
+}
+.policy-card h3,
+.policy-title{
+  font-size: clamp(1.35rem, 1.62vw, 2.05rem) !important;
+  line-height: 1.05 !important;
+  letter-spacing: .035em !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+  max-width: 100% !important;
+}
+.policy-card p{
+  font-size: .98rem !important;
+  line-height: 1.45 !important;
+}
+@media (max-width: 760px){
+  .policy-card h3,
+  .policy-title{
+    font-size: clamp(1.7rem, 8vw, 2.35rem) !important;
+  }
+}

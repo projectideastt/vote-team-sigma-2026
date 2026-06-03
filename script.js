@@ -5,13 +5,14 @@
   const scheduleKey='teamSigmaPublicReleaseScheduleV2';
   const defaultState={
     // Public default: candidate profiles are live on the site.
-    // Policies remain staged except Fundraising, and the manifesto remains staged until released.
+    // Public release package: candidate profiles and policy pages are live by default. The manifesto remains staged until released.
     'policy-fundraising':true,
-    'policy-admissions':false,
-    'policy-hr':false,
-    'policy-pr':false,
-    'policy-fieldtrip':false,
-    'policy-health':false,
+    'policy-admissions':true,
+    'policy-hr':true,
+    'policy-pr':true,
+    'policy-fieldtrip':true,
+    'policy-health':true,
+    'policy-conduct':true,
     'candidate-president':true,
     'candidate-vice-president':true,
     'candidate-secretary':true,
@@ -19,7 +20,7 @@
     'manifesto':false
   };
   const groups={
-    policies:['policy-fundraising','policy-admissions','policy-hr','policy-pr','policy-fieldtrip','policy-health'],
+    policies:['policy-fundraising','policy-admissions','policy-hr','policy-pr','policy-fieldtrip','policy-health','policy-conduct'],
     candidates:['candidate-president','candidate-vice-president','candidate-secretary','candidate-treasurer'],
     all:Object.keys(defaultState)
   };
@@ -30,6 +31,7 @@
     'policy-pr':'Public Relations & Social Media Policy',
     'policy-fieldtrip':'Field Trip Policy',
     'policy-health':'Health Emergency Response Policy',
+    'policy-conduct':'Student Code of Conduct & Discipline Policy',
     'candidate-president':'Board President Profile',
     'candidate-vice-president':'Board Vice President Profile',
     'candidate-secretary':'Board Secretary Profile',
@@ -153,7 +155,7 @@
     const openPolicies=groups.policies.filter(k=>s[k]).length;
     const openCandidates=groups.candidates.filter(k=>s[k]).length;
     const configNote = globalConfig.loaded ? 'Global release config loaded.' : 'Global release config not loaded; local preview controls only.';
-    status.innerHTML=`<h3>Page Status</h3><p>${openCandidates}/4 candidate profiles released · ${openPolicies}/6 policies released · ${s.manifesto?'Manifesto released':'Manifesto locked'}<br>${configNote}</p><div class="status-grid">${rows}</div>`;
+    status.innerHTML=`<h3>Page Status</h3><p>${openCandidates}/4 candidate profiles released · ${openPolicies}/7 policies released · ${s.manifesto?'Manifesto released':'Manifesto locked'}<br>${configNote}</p><div class="status-grid">${rows}</div>`;
   }
   async function checkPdfFiles(s){
     const cards=$$('[data-pdf-url]');
@@ -193,6 +195,7 @@
       UnlockPR:['policy-pr'],LockPR:['policy-pr'],
       UnlockFieldTrip:['policy-fieldtrip'],LockFieldTrip:['policy-fieldtrip'],
       UnlockHealth:['policy-health'],LockHealth:['policy-health'],
+      UnlockConduct:['policy-conduct'],LockConduct:['policy-conduct'],
       UnlockPresident:['candidate-president'],LockPresident:['candidate-president'],
       UnlockVicePresident:['candidate-vice-president'],LockVicePresident:['candidate-vice-president'],
       UnlockSecretary:['candidate-secretary'],LockSecretary:['candidate-secretary'],
@@ -201,7 +204,7 @@
       UnlockManifesto:['manifesto'],LockManifesto:['manifesto']
     };
     if(cmd==='UnlockAll'){setKeys(groups.all,true);removeSchedulesFor(groups.all);say('All sections are released in this browser.');return;}
-    if(cmd==='LockAll'){const locked={...defaultState,'policy-fundraising':true};saveState(locked);removeSchedulesFor(groups.all);applyRelease();say('Sections locked. Fundraising remains available.');return;}
+    if(cmd==='LockAll'){const locked={...defaultState};groups.policies.forEach(k=>locked[k]=false);locked['policy-fundraising']=true;saveState(locked);removeSchedulesFor(groups.all);applyRelease();say('Sections locked. Fundraising remains available.');return;}
     if(cmd==='UnlockPolicies'){setKeys(groups.policies,true);removeSchedulesFor(groups.policies);say('All policy pages are released in this browser.');return;}
     if(cmd==='LockPolicies'){const st=loadState();groups.policies.forEach(k=>st[k]=false);st['policy-fundraising']=true;saveState(st);removeSchedulesFor(groups.policies);applyRelease();say('Policy pages locked except Fundraising.');return;}
     if(cmd==='Reset'){localStorage.removeItem(storeKey);localStorage.removeItem(scheduleKey);applyRelease();renderSchedules();say('Browser view reset to public default.');return;}
