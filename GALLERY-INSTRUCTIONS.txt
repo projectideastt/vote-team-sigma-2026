@@ -1,0 +1,23 @@
+TEAM SIGMA GALLERY PAGE
+
+The gallery page is available at:
+  /gallery/
+
+Folders:
+  assets/gallery/videos  - upload MP4, WEBM, OGG, MOV or M4V videos here
+  assets/gallery/images  - upload JPG, PNG, WEBP, GIF or SVG images here
+  assets/gallery/posters - optional video thumbnail images; use the same base filename as the video
+
+Examples:
+  assets/gallery/videos/campaign-message.mp4
+  assets/gallery/posters/campaign-message.jpg
+  assets/gallery/images/election-day-01.jpg
+
+Static website note:
+GitHub Pages cannot automatically read a folder in the browser. The gallery page reads:
+  assets/gallery/gallery-manifest.json
+
+To update the manifest locally, run this from the site root:
+  node scripts/generate-gallery-manifest.js
+
+If GitHub Actions is enabled, the included workflow will regenerate the manifest automatically after files are pushed to the gallery folders.
