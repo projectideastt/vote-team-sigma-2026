@@ -29,6 +29,14 @@ function numberFrom(file){
   return match ? match[1].padStart(2, '0') : '';
 }
 
+function slugify(value){
+  return String(value || 'campaign-images')
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '') || 'campaign-images';
+}
+
 function categoryFor(file){
   const slug = path.basename(file, path.extname(file)).toLowerCase();
   const match = categoryPrefixes.find(([prefix]) => slug.startsWith(prefix));
@@ -64,11 +72,15 @@ ensureDir(galleryRoot);
 ensureDir(imageDir);
 
 const order = new Map(categoryPrefixes.map((entry, index) => [entry[1], index]));
-const images = listFiles(imageDir, imageExt).map(file => ({
-  title: niceTitle(file),
-  category: categoryFor(file),
-  src: `assets/gallery/images/${file}`
-})).sort((a,b) => {
+const images = listFiles(imageDir, imageExt).map(file => {
+  const category = categoryFor(file);
+  return {
+    title: niceTitle(file),
+    category,
+    categorySlug: slugify(category),
+    src: `assets/gallery/images/${file}`
+  };
+}).sort((a,b) => {
   const byCategory = (order.get(a.category) ?? 99) - (order.get(b.category) ?? 99);
   return byCategory || a.src.localeCompare(b.src, undefined, {numeric:true, sensitivity:'base'});
 });
