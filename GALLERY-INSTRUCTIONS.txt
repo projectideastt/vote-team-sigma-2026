@@ -1,23 +1,22 @@
-TEAM SIGMA GALLERY PAGE
+Team Sigma Gallery Instructions
 
-The gallery page is available at:
-  /gallery/
+This package now uses an image-only gallery for election-day browsing.
 
-Folders:
-  assets/gallery/videos  - upload MP4, WEBM, OGG, MOV or M4V videos here
-  assets/gallery/images  - upload JPG, PNG, WEBP, GIF or SVG images here
-  assets/gallery/posters - optional video thumbnail images; use the same base filename as the video
+Key files:
+- gallery/index.html: gallery page
+- gallery.js: reads the JSON manifest and renders filters, image grid and lightbox
+- assets/gallery/gallery-manifest.json: list of images used by GitHub Pages
+- scripts/generate-gallery-manifest.js: regenerates the JSON file after images are added
 
-Examples:
-  assets/gallery/videos/campaign-message.mp4
-  assets/gallery/posters/campaign-message.jpg
-  assets/gallery/images/election-day-01.jpg
+Folder structure:
+- assets/gallery/images/ -> campaign images
 
-Static website note:
-GitHub Pages cannot automatically read a folder in the browser. The gallery page reads:
-  assets/gallery/gallery-manifest.json
+To add more images:
+1. Copy images into assets/gallery/images/.
+2. Run this from the repository root:
 
-To update the manifest locally, run this from the site root:
-  node scripts/generate-gallery-manifest.js
+   node scripts/generate-gallery-manifest.js
 
-If GitHub Actions is enabled, the included workflow will regenerate the manifest automatically after files are pushed to the gallery folders.
+3. Commit and push the updated image files and assets/gallery/gallery-manifest.json to GitHub.
+
+GitHub Pages cannot automatically scan folders, so the JSON manifest is the clean, reliable way for the static gallery page to know which images to display.

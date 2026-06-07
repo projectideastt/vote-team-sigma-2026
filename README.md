@@ -1,19 +1,19 @@
-# Team Sigma SPPS Public Website
+# Vote Team Sigma 2026
 
-Static campaign website for GitHub Pages.
+Static GitHub Pages campaign site for Team Sigma SPPS.
 
-## Upload structure
-Upload the contents of this folder to the repository root, not the wrapper folder.
+## Gallery
 
-Required root items:
-- index.html
-- style.css
-- script.js
-- assets/
-- downloads/
-- achievements/
-- meet-the-team/
-- manifesto/
+The gallery is at `gallery/index.html` and reads from:
 
-## Rollout note
-The hidden rollout panel changes what the current browser displays using local storage. It is staging friction, not security. Do not upload files that must remain private.
+```text
+assets/gallery/gallery-manifest.json
+```
+
+Add images to `assets/gallery/images/`, then run:
+
+```bash
+node scripts/generate-gallery-manifest.js
+```
+
+Commit the regenerated `gallery-manifest.json` with the new media files. GitHub Pages cannot automatically list folder contents, so the JSON file is used as the gallery index.

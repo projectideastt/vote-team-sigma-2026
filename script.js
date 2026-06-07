@@ -5,7 +5,7 @@
   const scheduleKey='teamSigmaPublicReleaseScheduleV2';
   const defaultState={
     // Public default: candidate profiles are live on the site.
-    // Public release package: candidate profiles and policy pages are live by default. The manifesto remains staged until released.
+    // Public release package: candidate profiles and policy pages are live by default.
     'policy-fundraising':true,
     'policy-admissions':true,
     'policy-hr':true,
@@ -16,8 +16,7 @@
     'candidate-president':true,
     'candidate-vice-president':true,
     'candidate-secretary':true,
-    'candidate-treasurer':true,
-    'manifesto':false
+    'candidate-treasurer':true
   };
   const groups={
     policies:['policy-fundraising','policy-admissions','policy-hr','policy-pr','policy-fieldtrip','policy-health','policy-conduct'],
@@ -36,7 +35,6 @@
     'candidate-vice-president':'Board Vice President Profile',
     'candidate-secretary':'Board Secretary Profile',
     'candidate-treasurer':'Board Treasurer Profile',
-    'manifesto':'Manifesto',
     'policies':'All Policies',
     'candidates':'All Candidate Profiles',
     'all':'Everything'
@@ -143,7 +141,7 @@
     const status=$('#sigma-status');
     if(!status) return;
     const sch=loadSchedules();
-    const rows=[...groups.candidates,'manifesto',...groups.policies].map(k=>{
+    const rows=[...groups.candidates,...groups.policies].map(k=>{
       const globalWhen=globalScheduleForKey(k);
       const globalTs=globalWhen ? Date.parse(globalWhen) : NaN;
       let state=s[k]?'Released':(sch[k]?'Local scheduled':(globalWhen?'Global scheduled':'Locked'));
@@ -155,7 +153,7 @@
     const openPolicies=groups.policies.filter(k=>s[k]).length;
     const openCandidates=groups.candidates.filter(k=>s[k]).length;
     const configNote = globalConfig.loaded ? 'Global release config loaded.' : 'Global release config not loaded; local preview controls only.';
-    status.innerHTML=`<h3>Page Status</h3><p>${openCandidates}/4 candidate profiles released · ${openPolicies}/7 policies released · ${s.manifesto?'Manifesto released':'Manifesto locked'}<br>${configNote}</p><div class="status-grid">${rows}</div>`;
+    status.innerHTML=`<h3>Page Status</h3><p>${openCandidates}/4 candidate profiles released · ${openPolicies}/7 policies released<br>${configNote}</p><div class="status-grid">${rows}</div>`;
   }
   async function checkPdfFiles(s){
     const cards=$$('[data-pdf-url]');
@@ -200,8 +198,7 @@
       UnlockVicePresident:['candidate-vice-president'],LockVicePresident:['candidate-vice-president'],
       UnlockSecretary:['candidate-secretary'],LockSecretary:['candidate-secretary'],
       UnlockTreasurer:['candidate-treasurer'],LockTreasurer:['candidate-treasurer'],
-      UnlockCandidates:groups.candidates,LockCandidates:groups.candidates,
-      UnlockManifesto:['manifesto'],LockManifesto:['manifesto']
+      UnlockCandidates:groups.candidates,LockCandidates:groups.candidates
     };
     if(cmd==='UnlockAll'){setKeys(groups.all,true);removeSchedulesFor(groups.all);say('All sections are released in this browser.');return;}
     if(cmd==='LockAll'){const locked={...defaultState};groups.policies.forEach(k=>locked[k]=false);locked['policy-fundraising']=true;saveState(locked);removeSchedulesFor(groups.all);applyRelease();say('Sections locked. Fundraising remains available.');return;}

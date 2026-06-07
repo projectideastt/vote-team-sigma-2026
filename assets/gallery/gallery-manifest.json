@@ -1,5 +1,175 @@
 {
-  "updated": "2026-06-06T15:50:06.120Z",
-  "videos": [],
-  "images": []
+  "updated": "2026-06-07T20:36:49.485Z",
+  "images": [
+    {
+      "title": "Then vs Now 01",
+      "category": "Then vs Now",
+      "src": "assets/gallery/images/then-vs-now-01.webp"
+    },
+    {
+      "title": "Then vs Now 02",
+      "category": "Then vs Now",
+      "src": "assets/gallery/images/then-vs-now-02.webp"
+    },
+    {
+      "title": "Before and After 04",
+      "category": "Before and After",
+      "src": "assets/gallery/images/before-after-04.webp"
+    },
+    {
+      "title": "Before and After 05",
+      "category": "Before and After",
+      "src": "assets/gallery/images/before-after-05.webp"
+    },
+    {
+      "title": "Before and After 06",
+      "category": "Before and After",
+      "src": "assets/gallery/images/before-after-06.webp"
+    },
+    {
+      "title": "Before and After 07",
+      "category": "Before and After",
+      "src": "assets/gallery/images/before-after-07.webp"
+    },
+    {
+      "title": "Before and After 08",
+      "category": "Before and After",
+      "src": "assets/gallery/images/before-after-08.webp"
+    },
+    {
+      "title": "Before and After 09",
+      "category": "Before and After",
+      "src": "assets/gallery/images/before-after-09.webp"
+    },
+    {
+      "title": "President Candidate Campaign Visual 02",
+      "category": "President Candidate",
+      "src": "assets/gallery/images/president-01-2.webp"
+    },
+    {
+      "title": "President Candidate Profile",
+      "category": "President Candidate",
+      "src": "assets/gallery/images/president-01.webp"
+    },
+    {
+      "title": "President Candidate Campaign Visual 04",
+      "category": "President Candidate",
+      "src": "assets/gallery/images/president-04.webp"
+    },
+    {
+      "title": "President Candidate Campaign Visual 05",
+      "category": "President Candidate",
+      "src": "assets/gallery/images/president-05.webp"
+    },
+    {
+      "title": "Vice President Candidate Profile",
+      "category": "Vice President Candidate",
+      "src": "assets/gallery/images/vice-president-02.webp"
+    },
+    {
+      "title": "Vice President Candidate Campaign Visual 04",
+      "category": "Vice President Candidate",
+      "src": "assets/gallery/images/vice-president-04.webp"
+    },
+    {
+      "title": "Vice President Candidate Campaign Visual 08",
+      "category": "Vice President Candidate",
+      "src": "assets/gallery/images/vice-president-08.webp"
+    },
+    {
+      "title": "Board Secretary Candidate Campaign Visual 02",
+      "category": "Board Secretary Candidate",
+      "src": "assets/gallery/images/board-secretary-02.webp"
+    },
+    {
+      "title": "Board Secretary Candidate Campaign Visual 02",
+      "category": "Board Secretary Candidate",
+      "src": "assets/gallery/images/board-secretary-03-2.webp"
+    },
+    {
+      "title": "Board Secretary Candidate Profile",
+      "category": "Board Secretary Candidate",
+      "src": "assets/gallery/images/board-secretary-03.webp"
+    },
+    {
+      "title": "Board Secretary Candidate Campaign Visual 06",
+      "category": "Board Secretary Candidate",
+      "src": "assets/gallery/images/board-secretary-06.webp"
+    },
+    {
+      "title": "Board Treasurer Candidate Campaign Visual 03",
+      "category": "Board Treasurer Candidate",
+      "src": "assets/gallery/images/board-treasurer-03.webp"
+    },
+    {
+      "title": "Board Treasurer Candidate Profile",
+      "category": "Board Treasurer Candidate",
+      "src": "assets/gallery/images/board-treasurer-04.webp"
+    },
+    {
+      "title": "Board Treasurer Candidate Campaign Visual 07",
+      "category": "Board Treasurer Candidate",
+      "src": "assets/gallery/images/board-treasurer-07.webp"
+    },
+    {
+      "title": "Frequently Asked Questions 01",
+      "category": "FAQs",
+      "src": "assets/gallery/images/faqs-01.webp"
+    },
+    {
+      "title": "Frequently Asked Questions 02",
+      "category": "FAQs",
+      "src": "assets/gallery/images/faqs-02.webp"
+    },
+    {
+      "title": "Policy Release 01",
+      "category": "Policy Work",
+      "src": "assets/gallery/images/policies-01.webp"
+    },
+    {
+      "title": "Policy Release 02",
+      "category": "Policy Work",
+      "src": "assets/gallery/images/policies-02.webp"
+    },
+    {
+      "title": "Policy Release 03",
+      "category": "Policy Work",
+      "src": "assets/gallery/images/policies-03.webp"
+    },
+    {
+      "title": "Policy Release 04",
+      "category": "Policy Work",
+      "src": "assets/gallery/images/policies-04.webp"
+    },
+    {
+      "title": "Policy Release 05",
+      "category": "Policy Work",
+      "src": "assets/gallery/images/policies-05.webp"
+    },
+    {
+      "title": "Policy Release 06",
+      "category": "Policy Work",
+      "src": "assets/gallery/images/policies-06.webp"
+    },
+    {
+      "title": "Facility Work 01",
+      "category": "Facility Work",
+      "src": "assets/gallery/images/facility-work-01.webp"
+    },
+    {
+      "title": "Facility Work 02",
+      "category": "Facility Work",
+      "src": "assets/gallery/images/facility-work-02.webp"
+    },
+    {
+      "title": "Facility Work 03",
+      "category": "Facility Work",
+      "src": "assets/gallery/images/facility-work-03.webp"
+    },
+    {
+      "title": "Facility Work 04",
+      "category": "Facility Work",
+      "src": "assets/gallery/images/facility-work-04.webp"
+    }
+  ]
 }
